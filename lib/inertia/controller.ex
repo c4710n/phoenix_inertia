@@ -8,6 +8,7 @@ defmodule Inertia.Controller do
   alias Inertia.Errors
   alias Inertia.SSR.RenderError
   alias Inertia.SSR
+  alias Inertia.Config
 
   import Phoenix.Controller
   import Plug.Conn
@@ -533,7 +534,9 @@ defmodule Inertia.Controller do
           send_ssr_response(conn, head, body)
 
         {:error, message} ->
-          if raise_on_ssr_failure?() do
+          endpoint = Config.fetch_endpoint!(conn)
+
+          if raise_ssr_error?(endpoint) do
             raise RenderError, message: message
           else
             Logger.error("SSR failed, falling back to CSR\n\n#{message}")
@@ -620,14 +623,22 @@ defmodule Inertia.Controller do
   end
 
   defp detect_ssr(conn, opts) do
-    put_private(conn, :inertia_ssr, opts[:ssr] || ssr_enabled_globally?())
+    value =
+      if opts[:ssr] do
+        true
+      else
+        endpoint = Config.fetch_endpoint!(conn)
+        global_ssr(endpoint)
+      end
+
+    put_private(conn, :inertia_ssr, value)
   end
 
-  defp ssr_enabled_globally? do
-    Application.get_env(:inertia, :ssr, false)
+  defp global_ssr(endpoint) do
+    Config.get(endpoint, :ssr, false)
   end
 
-  defp raise_on_ssr_failure? do
-    Application.get_env(:inertia, :raise_on_ssr_failure, true)
+  defp raise_ssr_error?(endpoint) do
+    Config.get(endpoint, :raise_ssr_error, true)
   end
 end

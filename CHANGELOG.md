@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- change config namespace to `config otp_app, endpoint_module, :inertia`
+- rename config `raise_on_ssr_failure` to `raise_ssr_error`.
+
 ## 2.2.0
 
 ### Added
@@ -105,7 +110,7 @@ Now, the serializer simply takes the _first error message_ and returns it under 
 - Assign errors via an `assign_errors` helper ([#10](https://github.com/inertiajs/inertia-phoenix/issues/10))
 - Preserve assigned errors across redirects ([#10](https://github.com/inertiajs/inertia-phoenix/issues/10))
 - Set up external redirects properly for Inertia requests ([#11](https://github.com/inertiajs/inertia-phoenix/issues/11))
-- Pass CSRF tokens via cookies ([#12](https://github.com/inertiajs/inertia-phoenix/issues/12)) 
+- Pass CSRF tokens via cookies ([#12](https://github.com/inertiajs/inertia-phoenix/issues/12))
 - Forward flash contents across forced refreshes ([#13](https://github.com/inertiajs/inertia-phoenix/issues/13))
 - Automatically pass Phoenix flash data via the `flash` prop
 

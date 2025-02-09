@@ -35,42 +35,39 @@ Add your desired configuration in your `config.exs` file:
 ```elixir
 # config/config.exs
 
-config :inertia,
-  # The Phoenix Endpoint module for your application. This is used for building
-  # asset URLs to compute a unique version hash to track when something has
-  # changed (and a reload is required on the frontend).
-  endpoint: MyAppWeb.Endpoint,
+config :my_app, MyAppWeb.Endpoint,
+  inertia: [
+    # An optional list of static file paths to track for changes. You'll generally
+    # want to include any JavaScript assets that may require a page refresh when
+    # modified.
+    static_paths: ["/assets/app.js"],
 
-  # An optional list of static file paths to track for changes. You'll generally
-  # want to include any JavaScript assets that may require a page refresh when
-  # modified.
-  static_paths: ["/assets/app.js"],
+    # The default version string to use (if you decide not to track any static
+    # assets using the `static_paths` config). Defaults to "1".
+    default_version: "1",
 
-  # The default version string to use (if you decide not to track any static
-  # assets using the `static_paths` config). Defaults to "1".
-  default_version: "1",
+    # Enable automatic conversion of prop keys from snake case (e.g. `inserted_at`),
+    # which is conventional in Elixir, to camel case (e.g. `insertedAt`), which is
+    # conventional in JavaScript. Defaults to `false`.
+    camelize_props: false,
 
-  # Enable automatic conversion of prop keys from snake case (e.g. `inserted_at`),
-  # which is conventional in Elixir, to camel case (e.g. `insertedAt`), which is
-  # conventional in JavaScript. Defaults to `false`.
-  camelize_props: false,
+    # Instruct the client side whether to encrypt the page object in the window history
+    # state. This can also be set/overridden on a per-request basis, using the `encrypt_history`
+    # controller helper. Defaults to `false`.
+    history: [encrypt: false],
 
-  # Instruct the client side whether to encrypt the page object in the window history
-  # state. This can also be set/overridden on a per-request basis, using the `encrypt_history`
-  # controller helper. Defaults to `false`.
-  history: [encrypt: false],
+    # Enable server-side rendering for page responses (requires some additional setup,
+    # see instructions below). Defaults to `false`.
+    ssr: false,
 
-  # Enable server-side rendering for page responses (requires some additional setup,
-  # see instructions below). Defaults to `false`.
-  ssr: false,
-
-  # Whether to raise an exception when server-side rendering fails (only applies
-  # when SSR is enabled). Defaults to `true`.
-  #
-  # Recommended: enable in non-production environments and disable in production,
-  # so that SSR failures will not cause 500 errors (but instead will fallback to
-  # CSR).
-  raise_on_ssr_failure: config_env() != :prod
+    # Whether to raise an exception when server-side rendering fails (only applies
+    # when SSR is enabled). Defaults to `true`.
+    #
+    # Recommended: enable in non-production environments and disable in production,
+    # so that SSR failures will not cause 500 errors (but instead will fallback to
+    # CSR).
+    raise_ssr_error: config_env() != :prod
+  ]
 ```
 
 This library includes a few modules to help render Inertia responses:
@@ -719,7 +716,7 @@ Then, update your config to enable SSR (if you'd like to enable it globally).
     # Recommended: enable in non-production environments and disable in production,
     # so that SSR failures will not cause 500 errors (but instead will fallback to
     # CSR).
-    raise_on_ssr_failure: config_env() != :prod
+    raise_ssr_error: config_env() != :prod
 ```
 
 ### Installing Node.js in your production

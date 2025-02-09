@@ -8,13 +8,12 @@ config :inertia, MyAppWeb.Endpoint,
     layout: false
   ],
   pubsub_server: MyApp.PubSub,
-  live_view: [signing_salt: "+r1ZDDS5"]
-
-config :inertia,
-  endpoint: MyAppWeb.Endpoint,
-  static_paths: ["/assets/app.js"],
-  default_version: "1",
-  camelize_props: false
+  live_view: [signing_salt: "+r1ZDDS5"],
+  inertia: [
+    static_paths: ["/assets/app.js"],
+    default_version: "1",
+    camelize_props: false
+  ]
 
 config :phoenix, :json_library, Jason
 
